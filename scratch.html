@@ -1,0 +1,115 @@
+<div class="hero text-center">
+    <h1>UFO Sightings</h1>
+    <p>The Truth is Out There</p>
+  </div>
+  <div class="container">
+    <div class="row margin-top-50">
+      <div class="col-md-2">
+        <aside class="filters">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <button id="filter-reset" type="submit" class="btn-default" alt="clear-Filter">Filter Reset</button>
+            </div>
+            <div class="panel-body">
+              <form>
+                <div class="form-group">
+                  <ul class="list-group" id="filters">
+                    <li class="filter list-group-item">
+                      <label for="date">Enter a Date</label>
+                      <input class="form-control" id="datetime" type="text" placeholder="1/11/2011">
+                    </li> <!-- from https://www.w3schools.com/bootstrap/bootstrap_filters.asp  and https://www.w3schools.com/bootstrap/bootstrap_list_groups.asp-->
+                    <li class="filter list-group-item">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputCity">City</label>
+                      </div>
+                      <select class="custom-select" id="inputCity">
+                        <option selected>Cities</option>
+                      </select>
+                    </li>
+                    <li class="filter list-group-item">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputState">State</label>
+                      </div>
+                      <select class="custom-select" id="inputState">
+                        <option selected>States</option>
+                      </select>
+                    </li>
+                    <li class="filter list-group-item">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputCountry">Country</label>
+                      </div>
+                      <select class="custom-select" id="inputCountry">
+                        <option selected>Countries</option>
+                      </select>
+                    </li>
+                    <li class="filter list-group-item">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputShape">Shape</label>
+                      </div>
+                      <select class="custom-select" id="inputShapes">
+                        <option selected>Shapes</option>
+                      </select>
+                    </li>
+                  </ul>
+                </div>
+
+
+
+<script>
+
+// Create a custom filtering function
+function selectFilter(rowData) {
+    // Filter by date
+    var result = (new Date(rowData.datetime)).getTime() >= (new Date(inputDate.property("value"))).getTime();
+    // Filter by City
+    if (selectCity.property("value") != "All") {
+        result = (result && (rowData.city === selectCity.property("value")));
+    };
+    // Filter by State
+    if (selectState.property("value") != "All") {
+        result = (result && (rowData.state === selectState.property("value")));
+    };
+    // Filter by Shape
+    if (selectShape.property("value") != "All") {
+        result = (result && (rowData.shape === selectShape.property("value")));
+    };
+    return result;
+};
+
+// Define the click handler inline for filter table
+filterButton.on("click", function() {
+    // Prevent the page from refreshing
+    d3.event.preventDefault();
+
+    // filter table selections
+    var filterTableData = fullTableData.filter(selectFilter);  
+      
+    // Reload Table Data
+    loadTableData(filterTableData);
+});
+
+
+
+/* Initial Load of all components*/
+function initComponents() {
+    // Load input group select City
+    distinctCities.forEach((city) => {
+        selectCity.append("option").text(`${city}`);
+    });
+    // Load input group select State
+    distinctStates.forEach((state) => {
+        selectState.append("option").text(`${state}`);
+    });
+    // Load input group select Shape
+    distinctShapes.forEach((shape) => {
+        selectShape.append("option").text(`${shape}`);
+    });
+    // Load full table data
+    loadTableData(fullTableData);
+};
+
+// Run initialize
+initComponents();
+
+
+</script>
